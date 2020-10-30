@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "KinematicBody2D",
+"class": "Enemy",
+"language": "GDScript",
+"path": "res://src/Enemies/Enemy.gd"
+}, {
 "base": "Node",
 "class": "State",
 "language": "GDScript",
@@ -20,6 +25,7 @@ _global_script_classes=[ {
 "path": "res://src/Main/StateMachine/StateMachine.gd"
 } ]
 _global_script_class_icons={
+"Enemy": "",
 "State": "",
 "StateMachine": ""
 }
@@ -35,7 +41,8 @@ config/icon="res://icon.png"
 window/size/width=1920
 window/size/height=1080
 window/size/borderless=true
-window/size/fullscreen=true
+window/size/test_width=1280
+window/size/test_height=720
 window/stretch/mode="2d"
 window/stretch/aspect="keep"
 

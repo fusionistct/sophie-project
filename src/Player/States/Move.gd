@@ -14,15 +14,16 @@ export var jump_impulse = 900.0
 var acceleration = acceleration_default
 var max_speed = max_speed_default
 var velocity = Vector2.ZERO
+var knockback = false
 
 func unhandled_input(event: InputEvent) -> void:
 	if owner.is_on_floor() and event.is_action_pressed("jump"):
 		_state_machine.transition_to("Move/Air", { impulse = jump_impulse })
 
 func physics_process(delta: float) -> void:
+	var move_direction = Vector2.ZERO if knockback else get_move_direction()
 	velocity = calculate_velocity(velocity, max_speed,
-	acceleration, delta, get_move_direction())
-	#print_debug(velocity)
+	acceleration, delta, move_direction)
 	velocity = owner.move_and_slide(velocity, owner.FLOOR_NORMAL)
 	
 static func calculate_velocity(
@@ -44,3 +45,9 @@ static func get_move_direction() -> Vector2:
 	return Vector2(
 		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"), 1.0
 	)
+
+
+func _on_Enemy_Detector_body_entered(body: Node) -> void:
+	if body.is_in_group("Enemies"):
+		print_debug("activate")
+		_state_machine.transition_to("Move/Damage", {other_body = body})

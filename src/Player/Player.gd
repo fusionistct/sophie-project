@@ -133,3 +133,10 @@ func set_is_active(value: bool) -> void:
 	if not collider:
 		return
 	collider.disabled = not value
+
+#const KNOCKBACK_FORCE = 1.0
+#
+#func _on_Enemy_Detector_body_entered(body: Node) -> void:
+#	print_debug("activate")
+#	if body.is_in_group("Enemies"):
+#		state_machine.transition_to("Move/Damage", {other_body = body})
