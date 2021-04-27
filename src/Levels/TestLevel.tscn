@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/testblock.png" type="Texture" id=1]
 [ext_resource path="res://src/Player/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/interface/Interface.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/Enemies/Slime/Slime.tscn" type="PackedScene" id=4]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
@@ -38,15 +39,43 @@ z_index = 1
 tile_set = SubResource( 2 )
 cell_size = Vector2( 32, 32 )
 format = 1
-tile_data = PoolIntArray( 0, 0, 0, 29, 0, 0, 65536, 0, 0, 65565, 0, 0, 131072, 0, 0, 131101, 0, 0, 196608, 0, 0, 196637, 0, 0, 262144, 0, 0, 262173, 0, 0, 327680, 0, 0, 327709, 0, 0, 393216, 0, 0, 393245, 0, 0, 458752, 0, 0, 458781, 0, 0, 524288, 0, 0, 524317, 0, 0, 589824, 0, 0, 589853, 0, 0, 655360, 0, 0, 655389, 0, 0, 720896, 0, 0, 720925, 0, 0, 786432, 0, 0, 786461, 0, 0, 851968, 0, 0, 851997, 0, 0, 917504, 0, 0, 917533, 0, 0, 983040, 0, 0, 983041, 0, 0, 983042, 0, 0, 983043, 0, 0, 983044, 0, 0, 983045, 0, 0, 983046, 0, 0, 983047, 0, 0, 983048, 0, 0, 983049, 0, 0, 983050, 0, 0, 983051, 0, 0, 983052, 0, 0, 983053, 0, 0, 983054, 0, 0, 983055, 0, 0, 983056, 0, 0, 983057, 0, 0, 983058, 0, 0, 983059, 0, 0, 983060, 0, 0, 983061, 0, 0, 983062, 0, 0, 983063, 0, 0, 983064, 0, 0, 983065, 0, 0, 983066, 0, 0, 983067, 0, 0, 983068, 0, 0, 983069, 0, 0, 1048576, 0, 0, 1048577, 0, 0, 1048578, 0, 0, 1048579, 0, 0, 1048580, 0, 0, 1048581, 0, 0, 1048582, 0, 0, 1048583, 0, 0, 1048584, 0, 0, 1048585, 0, 0, 1048586, 0, 0, 1048587, 0, 0, 1048588, 0, 0, 1048589, 0, 0, 1048590, 0, 0, 1048591, 0, 0, 1048592, 0, 0, 1048593, 0, 0, 1048594, 0, 0, 1048595, 0, 0, 1048596, 0, 0, 1048597, 0, 0, 1048598, 0, 0, 1048599, 0, 0, 1048600, 0, 0, 1048601, 0, 0, 1048602, 0, 0, 1048603, 0, 0, 1048604, 0, 0, 1048605, 0, 0 )
+tile_data = PoolIntArray( 0, 0, 0, 29, 0, 0, 65536, 0, 0, 65565, 0, 0, 131072, 0, 0, 131101, 0, 0, 196608, 0, 0, 196637, 0, 0, 262144, 0, 0, 262173, 0, 0, 327680, 0, 0, 327709, 0, 0, 393216, 0, 0, 393240, 0, 0, 393241, 0, 0, 393245, 0, 0, 458752, 0, 0, 458781, 0, 0, 524288, 0, 0, 524317, 0, 0, 589824, 0, 0, 589843, 0, 0, 589844, 0, 0, 589853, 0, 0, 655360, 0, 0, 655389, 0, 0, 720896, 0, 0, 720922, 0, 0, 720923, 0, 0, 720924, 0, 0, 720925, 0, 0, 786432, 0, 0, 786454, 0, 0, 786455, 0, 0, 786458, 0, 0, 786459, 0, 0, 786460, 0, 0, 786461, 0, 0, 851968, 0, 0, 851994, 0, 0, 851995, 0, 0, 851996, 0, 0, 851997, 0, 0, 917504, 0, 0, 917530, 0, 0, 917531, 0, 0, 917532, 0, 0, 917533, 0, 0, 983040, 0, 0, 983041, 0, 0, 983042, 0, 0, 983043, 0, 0, 983044, 0, 0, 983045, 0, 0, 983046, 0, 0, 983047, 0, 0, 983048, 0, 0, 983049, 0, 0, 983050, 0, 0, 983051, 0, 0, 983052, 0, 0, 983053, 0, 0, 983054, 0, 0, 983055, 0, 0, 983056, 0, 0, 983057, 0, 0, 983058, 0, 0, 983059, 0, 0, 983060, 0, 0, 983061, 0, 0, 983062, 0, 0, 983063, 0, 0, 983064, 0, 0, 983065, 0, 0, 983066, 0, 0, 983067, 0, 0, 983068, 0, 0, 983069, 0, 0, 1048576, 0, 0, 1048577, 0, 0, 1048578, 0, 0, 1048579, 0, 0, 1048580, 0, 0, 1048581, 0, 0, 1048582, 0, 0, 1048583, 0, 0, 1048584, 0, 0, 1048585, 0, 0, 1048586, 0, 0, 1048587, 0, 0, 1048588, 0, 0, 1048589, 0, 0, 1048590, 0, 0, 1048591, 0, 0, 1048592, 0, 0, 1048593, 0, 0, 1048594, 0, 0, 1048595, 0, 0, 1048596, 0, 0, 1048597, 0, 0, 1048598, 0, 0, 1048599, 0, 0, 1048600, 0, 0, 1048601, 0, 0, 1048602, 0, 0, 1048603, 0, 0, 1048604, 0, 0, 1048605, 0, 0 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 512, 496 )
 
-[node name="Move" parent="Player/StateMachine" index="0"]
-jump_impulse = 1000.0
+[node name="Camera2D" parent="Player" index="0"]
+position = Vector2( 0, 0 )
+zoom = Vector2( 0.65, 0.65 )
+limit_right = 1920
+limit_bottom = 1085
+drag_margin_v_enabled = false
+smoothing_speed = 10.0
 
-[node name="Slime" parent="." instance=ExtResource( 4 )]
+[node name="Ground Attack" parent="Player/Sprite" index="11"]
+frame = 5
+
+[node name="Move" parent="Player/StateMachine" index="0"]
+jump_impulse = 1200.0
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="Slime" parent="Enemies" instance=ExtResource( 4 )]
 position = Vector2( 1126.17, 544.531 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Interface" parent="CanvasLayer" instance=ExtResource( 3 )]
+anchor_left = 0.0213444
+anchor_top = -0.0313464
+anchor_right = 1.02134
+anchor_bottom = 0.968654
+margin_left = 13.9832
+margin_top = 16.5895
+margin_right = 13.9832
+margin_bottom = 16.5895
+
+[connection signal="health_changed" from="Player/Health" to="CanvasLayer/Interface" method="_on_Health_health_changed"]
+[connection signal="health_initialize" from="Player/Health" to="CanvasLayer/Interface" method="_on_Health_health_initialize"]
 
 [editable path="Player"]

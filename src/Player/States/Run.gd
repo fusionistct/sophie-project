@@ -11,6 +11,7 @@ func physics_process(delta: float) -> void:
 			_state_machine.transition_to("Move/Idle")
 	else:
 		_state_machine.transition_to("Move/Air")
+		owner.ground_buffer_frames_left = 5
 	move.physics_process(delta)
 
 func enter(msg: Dictionary = {}) -> void:
