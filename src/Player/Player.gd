@@ -39,6 +39,9 @@ onready var health = $Health
 onready var dead = false;
 onready var attacking = false
 
+#True if attack animation finished but there is time to continue the combo
+onready var comboState = false
+
 #Determines invincibility frames
 onready var invincible = false;
 var invincibilityTimer
@@ -51,8 +54,12 @@ onready var attackPoints = 3
 onready var direction = 0
 
 #Measures buffer frames
-var jump_buffer_frames_left = 0
-var ground_buffer_frames_left = 0
+var jump_buffer_frames_left = 0 #pressing jump before hitting ground
+var ground_buffer_frames_left = 0 #pressing jump after walking off ground
+var attack_buffer_frames_left = 0 #pressing jump after a ground attack
+
+#How many frames have been in the air
+var jumpFrame = 0
 
 #Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -65,6 +72,8 @@ func _ready() -> void:
 
 # warning-ignore:unused_argument
 func _physics_process(delta: float) -> void:
+	#print_debug(currentAnim.name, " ", state_machine.state.name, " ",attacking)
+	
 	if jump_buffer_frames_left > 0:
 		jump_buffer_frames_left -= 1
 	
@@ -124,26 +133,31 @@ func process_attack():
 			
 
 func process_move():
-	if direction > 0:
-		if sprite.get_scale().x < 0:
-			_handleTurn()
-		sprite.set_scale(Vector2(1, 1))
-		collider.set_scale(Vector2(1, 1))
-		_handleMovement()
-	elif direction < 0:
-		if sprite.get_scale().x > 0:
-			_handleTurn()
-		sprite.set_scale(Vector2(-1, 1))
-		collider.set_scale(Vector2(-1, 1))
-		_handleMovement()
-	else:
-		if animationPlayer.get_current_animation() == "Run":
-			_changeAnim(runAnim, runToIdleAnim)
-		if animationPlayer.get_current_animation() == "IdleToRun":
-			_changeAnim(idleToRunAnim, idleAnim)
-		if animationPlayer.get_current_animation() == "TurnAround":
-			_changeAnim(turnAroundAnim, runToIdleAnim)
+	if !(state_machine.state.name == "AirAttack" and self.is_on_floor()):	
+		if direction > 0:
+			if sprite.get_scale().x < 0:
+				_handleTurn()
+			sprite.set_scale(Vector2(1, 1))
+			collider.set_scale(Vector2(1, 1))
+			_handleMovement()
+		elif direction < 0:
+			if sprite.get_scale().x > 0:
+				_handleTurn()
+			sprite.set_scale(Vector2(-1, 1))
+			collider.set_scale(Vector2(-1, 1))
+			_handleMovement()
+		else:
+			if animationPlayer.get_current_animation() == "Run":
+				_changeAnim(runAnim, runToIdleAnim)
+			if animationPlayer.get_current_animation() == "IdleToRun":
+				_changeAnim(idleToRunAnim, idleAnim)
+			if animationPlayer.get_current_animation() == "TurnAround":
+				_changeAnim(turnAroundAnim, runToIdleAnim)
 	if not self.is_on_floor():
+		if currentAnim == groundAttackAnim:
+				comboState = false
+				attackPoints = 3
+				$AttackReset.stop()
 		var y_velocity = state_machine.state.move.velocity.y #assumes current state is Air
 		if currentAnim == hurtAnim:
 					yield(animationPlayer, "animation_finished")
@@ -185,8 +199,14 @@ func _handleMovement() -> void:
 			_changeAnim(runToIdleAnim, runAnim)
 		elif animationPlayer.get_current_animation() == "Idle":
 			_changeAnim(idleAnim,idleToRunAnim)
+		elif currentAnim == groundAttackAnim:
+			comboState = false
+			attackPoints = 3
+			$AttackReset.stop()
+			_changeAnim(groundAttackAnim, idleToRunAnim)
 	
 func _changeAnim(from: Sprite, to: Sprite) -> void:
+	#print_debug(from.name, to.name)
 	animationPlayer.seek(0, true)
 	from.hide()
 	to.show()
@@ -231,7 +251,14 @@ func _finishTransition(animName: String) -> void:
 		_changeAnim(idleToRunAnim, runAnim)
 	elif animName == "TurnAround":
 		_changeAnim(turnAroundAnim, runAnim)
-	elif animName == "Ground Attack 1" or animName == "Ground Attack 2" or animName == "Ground Attack 3":
+	elif animName == "Ground Attack 1":
+		#attacking = false
+		comboState = true
+	elif animName == "Ground Attack 2":
+		#attacking = false
+		comboState = true
+		state_machine.state.move.velocity.x = 0
+	elif animName == "Ground Attack 3":
 		attacking = false
 		_changeAnim(groundAttackAnim, idleAnim)
 	elif animName == "Air Attack":
@@ -252,5 +279,7 @@ func set_is_active(value: bool) -> void:
 
 
 func _on_AttackReset_timeout():
+	attacking = false
+	_changeAnim(currentAnim, idleAnim)
 	attackPoints = 3
 	$AttackReset.stop()

@@ -19,14 +19,13 @@ var knockback = false
 var attack = false
 
 func unhandled_input(event: InputEvent) -> void:	
-	if owner.is_on_floor():
+	if owner.is_on_floor() and !attack:
 		if event.is_action_pressed("jump"):
 			_state_machine.transition_to("Move/Air", { impulse = jump_impulse })
 		if Input.is_action_just_pressed("attack"):
 			_state_machine.transition_to("Move/ComboAttack")
 
-func physics_process(delta: float) -> void:
-	var is_jump_interrupted = Input.is_action_just_released("jump") and velocity.y < 0 and not knockback
+func physics_process(delta: float) -> void:	
 	var cancel_momentum = Input.is_action_just_released("move_left") or Input.is_action_just_released("move_right")
 	var move_direction = Vector2.ZERO if knockback or attack else get_move_direction()
 	if knockback:
@@ -36,7 +35,7 @@ func physics_process(delta: float) -> void:
 	else:
 		move_direction = get_move_direction()
 	velocity = calculate_velocity(velocity, max_speed,
-	acceleration, delta, move_direction, is_jump_interrupted, cancel_momentum)
+	acceleration, delta, move_direction, cancel_momentum)
 	velocity = owner.move_and_slide(velocity, owner.FLOOR_NORMAL)
 	
 static func calculate_velocity(
@@ -45,7 +44,6 @@ static func calculate_velocity(
 		acceleration: Vector2,
 		delta: float,
 		move_direction: Vector2,
-		is_jump_interrupted: bool,
 		cancel_momentum: bool
 	) -> Vector2:
 	var new_velocity = old_velocity
@@ -53,12 +51,6 @@ static func calculate_velocity(
 	new_velocity += move_direction * acceleration * delta
 	new_velocity.x = clamp(new_velocity.x, -max_speed.x, max_speed.x)
 	new_velocity.y = clamp(new_velocity.y, -max_speed.y, max_speed.y)
-	
-	if is_jump_interrupted:
-		if new_velocity.y > -600:
-			new_velocity.y = 0.0
-		else:
-			new_velocity.y = clamp(new_velocity.y, -600, max_speed.y)
 	
 	if cancel_momentum:
 		new_velocity.x = 0.0

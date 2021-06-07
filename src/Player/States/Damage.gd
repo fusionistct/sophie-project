@@ -27,6 +27,5 @@ func calculate_knock_back(knock_back_direction) -> Vector2:
 		Vector2(600, 200),
 		1.0,
 		knock_back_direction,
-		false,
 		false
 	)

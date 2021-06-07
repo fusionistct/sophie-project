@@ -15,18 +15,18 @@
 [ext_resource path="res://assets/Sophie/fall.png" type="Texture" id=13]
 [ext_resource path="res://assets/Sophie/jump-to-fall.png" type="Texture" id=14]
 [ext_resource path="res://assets/Sophie/landing.png" type="Texture" id=15]
-[ext_resource path="res://src/Player/Damage.gd" type="Script" id=16]
+[ext_resource path="res://src/Player/States/Damage.gd" type="Script" id=16]
 [ext_resource path="res://assets/Sophie/hurt.png" type="Texture" id=17]
 [ext_resource path="res://src/Player/Health.gd" type="Script" id=18]
 [ext_resource path="res://assets/Sophie/death.png" type="Texture" id=19]
 [ext_resource path="res://assets/Sophie/attack-v4.png" type="Texture" id=20]
-[ext_resource path="res://src/Player/ComboAttack.gd" type="Script" id=21]
+[ext_resource path="res://src/Player/States/ComboAttack.gd" type="Script" id=21]
 [ext_resource path="res://assets/Sophie/attack-air-v4.png" type="Texture" id=22]
-[ext_resource path="res://AirAttack.gd" type="Script" id=23]
+[ext_resource path="res://src/Player/States/AirAttack.gd" type="Script" id=23]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Air Attack"
-length = 0.388889
+length = 0.333334
 step = 0.0555556
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite/Air Attack:frame")
@@ -521,15 +521,16 @@ hframes = 8
 visible = false
 position = Vector2( 5.91176, -5 )
 texture = ExtResource( 20 )
-offset = Vector2( 6, 0 )
+offset = Vector2( -8, 0 )
 hframes = 26
-frame = 12
+frame = 7
 
 [node name="Air Attack" type="Sprite" parent="Sprite"]
 visible = false
 position = Vector2( 1, -5 )
 texture = ExtResource( 22 )
 hframes = 9
+frame = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "Idle"
@@ -600,7 +601,7 @@ shape = SubResource( 19 )
 script = ExtResource( 18 )
 
 [node name="AttackReset" type="Timer" parent="."]
-wait_time = 0.35
+wait_time = 0.6
 
 [node name="Hitboxes" type="Node2D" parent="."]
 position = Vector2( 0, 16.5 )
