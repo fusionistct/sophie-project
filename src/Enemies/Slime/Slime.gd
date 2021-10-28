@@ -5,6 +5,8 @@ extends "res://src/Enemies/Enemy.gd"
 # var a: int = 2
 # var b: String = "text"
 onready var sprite: Node2D = $Sprite
+onready var idleAnim: Node2D = $Sprite/Idle
+onready var hurtAnim: Node2D = $Sprite/Hurt
 onready var collider: Node2D = $CollisionShape2D
 
 # Called when the node enters the scene tree for the first time.
@@ -27,16 +29,29 @@ func attack_state(delta):
 	pass
 	
 func stunned_state(delta):
-	pass
+	_velocity = move_and_slide(_velocity, FLOOR_NORMAL)
 	
-func take_knockback(delta):
-	pass
+func take_knockback():
+	_velocity = calculate_velocity(
+		Vector2.ZERO,
+		Vector2(500, 1500),
+		Vector2(150, 200),
+		1.0,
+		Vector2(sprite.get_scale().x, -1))
+	print_debug(_velocity)
+	_velocity = move_and_slide(_velocity, FLOOR_NORMAL)
+	print_debug(_velocity)
+	yield(get_tree().create_timer(.15), "timeout")
+	_velocity = Vector2.ZERO
 
 
 func _on_Hurtbox_area_entered(area):
 	_health -= 1
 	print_debug(_health)
+	idleAnim.hide()
+	hurtAnim.show()
 	if _health == 0:
 		queue_free()
 	else:
+		take_knockback()
 		state = STUNNED
