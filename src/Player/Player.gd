@@ -38,6 +38,7 @@ onready var currentAnim = idleAnim
 onready var health = $Health
 onready var dead = false;
 onready var attacking = false
+onready var dashing = false;
 
 #True if attack animation finished but there is time to continue the combo
 onready var comboState = false
@@ -46,6 +47,7 @@ onready var comboState = false
 onready var invincible = false;
 var invincibilityTimer
 const INVINCIBILITY_TIME = 2
+const DASH_INVINCIBILITY_TIME = .2
 
 #Determines number of combo attacks left
 onready var attackPoints = 3
@@ -66,7 +68,6 @@ func _ready() -> void:
 	
 	animationPlayer.connect("animation_finished", self, "_finishTransition")
 	invincibilityTimer = Timer.new()
-	invincibilityTimer.set_wait_time(INVINCIBILITY_TIME)
 	add_child(invincibilityTimer)
 	invincibilityTimer.connect("timeout", self, "_finishInvincibility")
 
@@ -87,8 +88,12 @@ func _physics_process(delta: float) -> void:
 	if invincible and !detector.disabled:
 		detector.disabled = true
 		sprite.modulate.a = 0.5
+		if dashing:
+			invincibilityTimer.set_wait_time(DASH_INVINCIBILITY_TIME)
+		else:
+			invincibilityTimer.set_wait_time(INVINCIBILITY_TIME)
+			_changeAnim(currentAnim, hurtAnim)
 		invincibilityTimer.start()
-		_changeAnim(currentAnim, hurtAnim)
 	if attacking:
 		process_attack()
 	else:

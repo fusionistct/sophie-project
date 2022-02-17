@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://src/Main/StateMachine/StateMachine.gd" type="Script" id=1]
 [ext_resource path="res://src/Player/Player.gd" type="Script" id=2]
@@ -23,6 +23,7 @@
 [ext_resource path="res://src/Player/States/ComboAttack.gd" type="Script" id=21]
 [ext_resource path="res://assets/Sophie/attack-air-v4.png" type="Texture" id=22]
 [ext_resource path="res://src/Player/States/AirAttack.gd" type="Script" id=23]
+[ext_resource path="res://src/Player/Dash.gd" type="Script" id=24]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Air Attack"
@@ -577,8 +578,10 @@ script = ExtResource( 21 )
 [node name="AirAttack" type="Node" parent="StateMachine/Move"]
 script = ExtResource( 23 )
 
+[node name="Dash" type="Node" parent="StateMachine/Move"]
+script = ExtResource( 24 )
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2( 0, 1 )
 shape = SubResource( 18 )
 

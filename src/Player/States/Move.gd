@@ -16,6 +16,7 @@ var max_speed = max_speed_default
 var velocity = Vector2.ZERO
 var move_direction : Vector2
 var knockback = false
+var dash = false
 var attack = false
 
 func unhandled_input(event: InputEvent) -> void:	
@@ -24,18 +25,21 @@ func unhandled_input(event: InputEvent) -> void:
 			_state_machine.transition_to("Move/Air", { impulse = jump_impulse })
 		if Input.is_action_just_pressed("attack"):
 			_state_machine.transition_to("Move/ComboAttack")
+		if Input.is_action_just_pressed("ui_select"):
+			_state_machine.transition_to("Move/Dash")
 
 func physics_process(delta: float) -> void:	
 	var cancel_momentum = Input.is_action_just_released("move_left") or Input.is_action_just_released("move_right")
 	var move_direction = Vector2.ZERO if knockback or attack else get_move_direction()
 	if knockback:
 		move_direction = Vector2.ZERO
-	elif attack:
+	elif attack or dash:
 		move_direction = Vector2(0, 1)
 	else:
 		move_direction = get_move_direction()
-	velocity = calculate_velocity(velocity, max_speed,
-	acceleration, delta, move_direction, cancel_momentum)
+	if !dash:
+		velocity = calculate_velocity(velocity, max_speed,
+		acceleration, delta, move_direction, cancel_momentum)
 	velocity = owner.move_and_slide(velocity, owner.FLOOR_NORMAL)
 	
 static func calculate_velocity(
