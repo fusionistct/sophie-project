@@ -45,7 +45,7 @@ tile_data = PoolIntArray( 0, 0, 0, 29, 0, 0, 65536, 0, 0, 65565, 0, 0, 131072, 0
 position = Vector2( 512, 496 )
 
 [node name="Camera2D" parent="Player" index="0"]
-position = Vector2( 0, 0 )
+position = Vector2( 0.25, 0 )
 zoom = Vector2( 0.65, 0.65 )
 limit_right = 1920
 limit_bottom = 1085
